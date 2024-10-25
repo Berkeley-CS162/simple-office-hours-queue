@@ -54,6 +54,7 @@ interface CreateTicketFormProps {
   setExistingTicket?: (ticket: TicketWithNames) => void;
 }
 
+/* TODO: character limit: 30. add to the create ticket form */
 const CreateTicketForm = (props: CreateTicketFormProps) => {
   const {
     arePublicTicketsEnabled,
@@ -220,6 +221,18 @@ const CreateTicketForm = (props: CreateTicketFormProps) => {
       toast({
         title: "Error",
         description: "Please select an assignment and location",
+        status: "error",
+        position: "top-right",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (description.length < 30) {
+      toast({
+        title: "Error",
+        description: "Your ticket length must be at least 30 characters",
         status: "error",
         position: "top-right",
         duration: 3000,
