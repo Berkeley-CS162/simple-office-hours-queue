@@ -58,7 +58,7 @@ export const ticketRouter = router({
             },
           });
       } else {
-        let tempvar =
+        const tempvar =
         await ctx.prisma.$queryRaw`SELECT * FROM Ticket
                                    INNER JOIN User ON Ticket.createdByUserId = User.id
                                    INNER JOIN Emailgroup ON User.email = Emailgroup.email 
@@ -73,7 +73,7 @@ export const ticketRouter = router({
                                         AND (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
                                       )
                                   `
-        ; // 
+        ;
         doesStudentHaveActiveTicket = tempvar.length;
       }
 
