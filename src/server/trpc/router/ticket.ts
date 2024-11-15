@@ -70,7 +70,10 @@ export const ticketRouter = router({
                                             WHERE 
                                             User.id = ${ctx.session.user.id}
                                       )
-                                      AND Ticket.resolvedAt >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
+                                      AND (
+                                        Ticket.resolvedAt IS NULL
+                                        OR Ticket.resolvedAt >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
+                                      )
                                     ;
                                   `
                                   
