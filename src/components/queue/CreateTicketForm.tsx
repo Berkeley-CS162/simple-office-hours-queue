@@ -280,7 +280,7 @@ const CreateTicketForm = (props: CreateTicketFormProps) => {
             : "";
           toast({
             title: "Error",
-            description: `Could not create ticket. You may already have a ticket open. If this is a Project ticket, someone else in your group has a ticket open. If not, refresh and try again. ${coolDownText}`,
+            description: `Could not create ticket. You may already have a ticket open. If this is a Project ticket, someone else in your group has a ticket open. If not, refresh and try again. There is also a 30 minute cooldown for Project tickets. ${coolDownText}`,
             status: "error",
             position: "top-right",
             duration: 10000,
