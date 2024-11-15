@@ -64,7 +64,7 @@ export const ticketRouter = router({
                                    INNER JOIN Emailgroup ON User.email = Emailgroup.email 
                                     WHERE 
                                     (
-                                        ((Ticket.status='RESOLVED' OR Ticket.status='CLOSED') AND
+                                        (Ticket.status='RESOLVED' AND
                                             (Ticket.resolvedAt IS NULL
                                              OR Ticket.resolvedAt >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
                                             )
