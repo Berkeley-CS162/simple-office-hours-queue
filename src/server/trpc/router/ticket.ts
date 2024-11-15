@@ -69,14 +69,30 @@ export const ticketRouter = router({
                                         INNER JOIN User ON Ticket.createdByUserId = User.id
                                         INNER JOIN Emailgroup ON User.email = Emailgroup.email 
                                         WHERE 
-                                        Ticket.createdByUserId LIKE "{ctx.session.user.id}"
+                                        Ticket.createdByUserId LIKE "cm3hw9h08004zbcwzzt4egl5d"
                                         AND (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
                                       )
                                   `
         ;
+        console.log(tempvar.length);
         doesStudentHaveActiveTicket = tempvar.length;
       }
-
+/*
+`SELECT * FROM sohq.Ticket
+                                   INNER JOIN User ON sohq.Ticket.createdByUserId = User.id
+                                   INNER JOIN Emailgroup ON User.email = Emailgroup.email 
+                                    WHERE 
+                                      (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
+                                      AND Emailgroup.groupName IN (
+                                        SELECT Emailgroup.groupName from Ticket
+                                        INNER JOIN User ON Ticket.createdByUserId = User.id
+                                        INNER JOIN Emailgroup ON User.email = Emailgroup.email 
+                                        WHERE 
+                                        Ticket.createdByUserId LIKE "cm3hw9h08004zbcwzzt4egl5d"
+                                        AND (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
+                                      )
+                                  `
+*/
       const isQueueOpen = await ctx.prisma.settings.findFirst({
         where: { setting: SiteSettings.IS_QUEUE_OPEN },
       });
