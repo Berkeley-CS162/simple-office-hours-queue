@@ -71,7 +71,7 @@ export const ticketRouter = router({
                                         WHERE 
                                         Ticket.createdByUserId LIKE "{ctx.session.user.id}"
                                         AND (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
-                                      )
+                                      );
                                   `
         ;
         console.log(tempvar.length);
