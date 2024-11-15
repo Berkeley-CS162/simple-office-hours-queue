@@ -69,7 +69,9 @@ export const ticketRouter = router({
                                             INNER JOIN Emailgroup ON User.email = Emailgroup.email 
                                             WHERE 
                                             User.id = ${ctx.session.user.id}
-                                      );
+                                      )
+                                      AND Ticket.resolvedAt >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
+                                    ;
                                   `
                                   
         ;
