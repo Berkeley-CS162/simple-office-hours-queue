@@ -69,7 +69,7 @@ export const ticketRouter = router({
                                         INNER JOIN User ON Ticket.createdByUserId = User.id
                                         INNER JOIN Emailgroup ON User.email = Emailgroup.email 
                                         WHERE 
-                                        Ticket.createdByUserId LIKE "{ctx.session.user.id}"
+                                        Ticket.createdByUserId LIKE "${ctx.session.user.id}"
                                         AND (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
                                       );
                                   `
