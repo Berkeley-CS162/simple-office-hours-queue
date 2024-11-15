@@ -59,7 +59,7 @@ export const ticketRouter = router({
           });
       } else {
         const tempvar =
-        await ctx.prisma.$queryRaw`SELECT * FROM Ticket
+        await ctx.prisma.$queryRaw<unknown[]>`SELECT * FROM Ticket
                                    INNER JOIN User ON Ticket.createdByUserId = User.id
                                    INNER JOIN Emailgroup ON User.email = Emailgroup.email 
                                     WHERE 
