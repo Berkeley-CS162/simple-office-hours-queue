@@ -65,14 +65,13 @@ export const ticketRouter = router({
                                     WHERE 
                                       (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
                                       AND Emailgroup.groupName IN (
-                                        SELECT Emailgroup.groupName from Ticket
-                                        INNER JOIN User ON Ticket.createdByUserId = User.id
-                                        INNER JOIN Emailgroup ON User.email = Emailgroup.email 
-                                        WHERE 
-                                        Ticket.createdByUserId = ${ctx.session.user.id}
-                                        AND (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
+                                        SELECT Emailgroup.groupName from User
+                                            INNER JOIN Emailgroup ON User.email = Emailgroup.email 
+                                            WHERE 
+                                            User.id = ${ctx.session.user.id}
                                       );
                                   `
+                                  
         ;
         console.log(tempvar.length);
         doesStudentHaveActiveTicket = tempvar.length;
