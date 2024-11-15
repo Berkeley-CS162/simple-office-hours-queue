@@ -38,11 +38,6 @@ export const ticketRouter = router({
     .mutation(async ({ input, ctx }) => {
       // Limits students to 1 ticket at a time per queue
 
-      `SELECT * from Ticket,User,Emailgroup
-       WHERE Ticket.createdByUserId = User.id
-        AND User.email = Emailgroup.email 
-        AND Ticket.createdByUserId LIKE "{ctx.session.user.id}"
-        AND (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')`
       const doesStudentHaveActiveTicket
         = await ctx.prisma.$queryRaw`SELECT * from Ticket,User,Emailgroup
                                      WHERE Ticket.createdByUserId = User.id
