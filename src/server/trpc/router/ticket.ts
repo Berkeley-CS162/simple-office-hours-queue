@@ -28,6 +28,7 @@ export const ticketRouter = router({
       z.object({
         description: z.string().optional(),
         isPublic: z.boolean().optional(),
+        assignmentName: z.string(),
         assignmentId: z.number(),
         locationId: z.number(),
         locationDescription: z.string().optional(),
@@ -37,14 +38,44 @@ export const ticketRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       // Limits students to 1 ticket at a time per queue
-
-      const doesStudentHaveActiveTicket
-        = await ctx.prisma.$queryRaw`SELECT * from Ticket,User,Emailgroup
-                                     WHERE Ticket.createdByUserId = User.id
-                                       AND User.email = Emailgroup.email 
-                                       AND Ticket.createdByUserId LIKE "{ctx.session.user.id}"
-                                       AND (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')`
-      ;
+      let doesStudentHaveActiveTicket;
+      if (input.assignmentName.includes("Homework") || input.assignmentName.includes("0")) {
+        doesStudentHaveActiveTicket = await ctx.prisma.ticket.findFirst({
+            where: {
+              createdByUserId: ctx.session.user.id,
+              OR: [
+                { status: TicketStatus.PENDING },
+                { status: TicketStatus.OPEN },
+                { status: TicketStatus.ASSIGNED },
+                { status: TicketStatus.ABSENT },
+              ],
+              ...(input.personalQueueName
+                ? { personalQueueName: input.personalQueueName }
+                : { personalQueueName: null }),
+              ...(input.personalQueueName && {
+                personalQueueName: input.personalQueueName,
+              }),
+            },
+          });
+      } else {
+        let tempvar =
+        await ctx.prisma.$queryRaw`SELECT * FROM Ticket
+                                   INNER JOIN User ON Ticket.createdByUserId = User.id
+                                   INNER JOIN Emailgroup ON User.email = Emailgroup.email 
+                                    WHERE 
+                                      (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
+                                      AND Emailgroup.groupName IN (
+                                        SELECT Emailgroup.groupName from Ticket
+                                        INNER JOIN User ON Ticket.createdByUserId = User.id
+                                        INNER JOIN Emailgroup ON User.email = Emailgroup.email 
+                                        WHERE 
+                                        Ticket.createdByUserId LIKE "{ctx.session.user.id}"
+                                        AND (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
+                                      )
+                                  `
+        ; // 
+        doesStudentHaveActiveTicket = tempvar.length;
+      }
 
       const isQueueOpen = await ctx.prisma.settings.findFirst({
         where: { setting: SiteSettings.IS_QUEUE_OPEN },

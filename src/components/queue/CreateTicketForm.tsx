@@ -258,12 +258,14 @@ const CreateTicketForm = (props: CreateTicketFormProps) => {
       return;
     }
 
+
     // Prevents spamming the button
     setIsButtonLoading(true);
 
     await createTicketMutation
       .mutateAsync({
         description: description.trim(),
+        assignmentName: assignment.label,
         assignmentId: assignment.id,
         locationId: location.id,
         locationDescription: locationDescription.trim(),
