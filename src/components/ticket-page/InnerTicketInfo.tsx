@@ -185,13 +185,11 @@ const InnerTicketInfo = (props: InnerTicketInfoProps) => {
   return (
     <>
       <Text fontSize="2xl">
-        {canSeeName ? (
+        {(
           <TooltipName
             createdByName={ticket.createdByName ?? ""}
             createdByEmail={ticket.createdByEmail ?? ""}
           />
-        ) : (
-          <>{helpOrJoin} to see name</>
         )}
       </Text>
       <Text>

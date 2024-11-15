@@ -229,10 +229,10 @@ const CreateTicketForm = (props: CreateTicketFormProps) => {
       return;
     }
 
-    if (description.length < 30) {
+    if (description.trim().length < 50) {
       toast({
         title: "Error",
-        description: "Your ticket length must be at least 30 characters",
+        description: "Your ticket length must be at least 50 characters",
         status: "error",
         position: "top-right",
         duration: 3000,

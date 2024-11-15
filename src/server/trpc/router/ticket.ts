@@ -37,23 +37,19 @@ export const ticketRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       // Limits students to 1 ticket at a time per queue
-      const doesStudentHaveActiveTicket = await ctx.prisma.ticket.findFirst({
-        where: {
-          createdByUserId: ctx.session.user.id,
-          OR: [
-            { status: TicketStatus.PENDING },
-            { status: TicketStatus.OPEN },
-            { status: TicketStatus.ASSIGNED },
-            { status: TicketStatus.ABSENT },
-          ],
-          ...(input.personalQueueName
-            ? { personalQueueName: input.personalQueueName }
-            : { personalQueueName: null }),
-          ...(input.personalQueueName && {
-            personalQueueName: input.personalQueueName,
-          }),
-        },
-      });
+
+      `SELECT * from Ticket,User,Emailgroup
+       WHERE Ticket.createdByUserId = User.id
+        AND User.email = Emailgroup.email 
+        AND Ticket.createdByUserId LIKE "{ctx.session.user.id}"
+        AND (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')`
+      const doesStudentHaveActiveTicket
+        = await ctx.prisma.$queryRaw`SELECT * from Ticket,User,Emailgroup
+                                     WHERE Ticket.createdByUserId = User.id
+                                       AND User.email = Emailgroup.email 
+                                       AND Ticket.createdByUserId LIKE "{ctx.session.user.id}"
+                                       AND (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')`
+      ;
 
       const isQueueOpen = await ctx.prisma.settings.findFirst({
         where: { setting: SiteSettings.IS_QUEUE_OPEN },
