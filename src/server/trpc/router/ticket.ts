@@ -73,7 +73,7 @@ export const ticketRouter = router({
                                       OR
                                       (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
                                     )
-                                      AND Assignment.name LIKE "%Project%"
+                                      AND Assignment.name LIKE '%Project%'
                                       AND Emailgroup.groupName IN (
                                         SELECT Emailgroup.groupName from User
                                             INNER JOIN Emailgroup ON User.email = Emailgroup.email 
