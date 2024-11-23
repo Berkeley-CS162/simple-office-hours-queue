@@ -78,7 +78,7 @@ export const ticketRouter = router({
                                         SELECT Emailgroup.groupName from User
                                             INNER JOIN Emailgroup ON User.email = Emailgroup.email 
                                             WHERE 
-                                            User.id = "${ctx.session.user.id}"
+                                            User.id = ${ctx.session.user.id}
                                       )
                                     ;
                                   `
