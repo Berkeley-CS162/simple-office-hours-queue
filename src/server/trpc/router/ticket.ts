@@ -61,7 +61,8 @@ export const ticketRouter = router({
         const tempvar =
         await ctx.prisma.$queryRaw<unknown[]>`SELECT * FROM Ticket
                                    INNER JOIN User ON Ticket.createdByUserId = User.id
-                                   INNER JOIN Emailgroup ON User.email = Emailgroup.email 
+                                   INNER JOIN Emailgroup ON User.email = Emailgroup.email
+                                   INNER JOIN Assignment ON Ticket.assignmentId = Assignment.id
                                     WHERE 
                                     (
                                         (Ticket.status='RESOLVED' AND
@@ -72,11 +73,12 @@ export const ticketRouter = router({
                                       OR
                                       (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
                                     )
+                                      AND Assignment.name LIKE "%Project%"
                                       AND Emailgroup.groupName IN (
                                         SELECT Emailgroup.groupName from User
                                             INNER JOIN Emailgroup ON User.email = Emailgroup.email 
                                             WHERE 
-                                            User.id = ${ctx.session.user.id}
+                                            User.id = "${ctx.session.user.id}"
                                       )
                                     ;
                                   `
