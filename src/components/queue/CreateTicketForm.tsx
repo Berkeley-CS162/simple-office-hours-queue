@@ -244,12 +244,15 @@ const CreateTicketForm = (props: CreateTicketFormProps) => {
     // If description has "[this test]" or "[this concept]" in it, toast and return
     if (
       description.includes("[this test]") ||
-      description.includes("[this concept]")
+      description.includes("[1-2 sentences]") ||
+      description.includes("[Function:Line number]") ||
+      description.includes("[this concept]") ||
+      description.includes("[Things you have tried]")
     ) {
       toast({
         title: "Error",
         description:
-          "Please replace [this concept] or [this test] with the the specific concept or test",
+          "Please replace text in brackets (e.g. [this test]) with the the specific concept or test",
         status: "error",
         position: "top-right",
         duration: 3000,
