@@ -65,12 +65,6 @@ export const ticketRouter = router({
                                    INNER JOIN Assignment ON Ticket.assignmentId = Assignment.id
                                     WHERE 
                                     (
-                                        (Ticket.status='RESOLVED' AND
-                                            (Ticket.resolvedAt IS NULL
-                                             OR Ticket.resolvedAt >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
-                                            )
-                                        )
-                                      OR
                                       (Ticket.status='PENDING' OR Ticket.status='OPEN' OR Ticket.status='ASSIGNED')
                                     )
                                       AND Assignment.name LIKE '%Project%'
